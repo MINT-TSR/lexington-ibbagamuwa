@@ -1,0 +1,79 @@
+{
+  "students": [
+    {
+      "id": "1757372864980-io72hk",
+      "name": "cfefe",
+      "className": "fef",
+      "monthlyFee": 3500,
+      "planId": "1757368651149-vofpkx",
+      "payments": {
+        "jan": {
+          "paid": false
+        },
+        "feb": {
+          "paid": true
+        },
+        "mar": {
+          "paid": false
+        },
+        "apr": {
+          "paid": false
+        },
+        "may": {
+          "paid": false
+        },
+        "jun": {
+          "paid": false
+        },
+        "jul": {
+          "paid": false
+        },
+        "aug": {
+          "paid": false
+        },
+        "sep": {
+          "paid": false
+        },
+        "oct": {
+          "paid": false
+        },
+        "nov": {
+          "paid": false
+        },
+        "dec": {
+          "paid": false
+        }
+      }
+    }
+  ],
+  "plans": [
+    {
+      "id": "1757367866356-krzyj1",
+      "name": "monthly",
+      "monthlyFee": 2500
+    },
+    {
+      "id": "1757368651149-vofpkx",
+      "name": "pre",
+      "monthlyFee": 3500
+    }
+  ],
+  "transactions": [
+    {
+      "id": "1757372887687-moidw2",
+      "type": "income",
+      "amount": 1000,
+      "note": "",
+      "dateISO": "2025-09-08T23:08:07.687Z"
+    },
+    {
+      "id": "1757372927990-rg1lco",
+      "type": "expense",
+      "amount": 100,
+      "note": "",
+      "dateISO": "2025-09-08T23:08:47.990Z"
+    }
+  ],
+  "createdAt": "2025-09-08T21:34:50.255Z",
+  "updatedAt": "2025-09-08T23:08:47.990Z"
+}
