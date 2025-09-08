@@ -90,3 +90,9 @@ jspm_packages/
 
 # TernJS port file
 .tern-port
+
+# Node.js binaries and large files
+*.node
+*.wasm
+*.js.map
+node_modules/.cache/
