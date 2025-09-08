@@ -30,7 +30,7 @@ export function middleware(req: Request) {
   }
 
   const cookie = (req as any).headers.get('cookie') || ''
-  const token = cookie.split(';').map(s => s.trim()).find(s => s.startsWith('lex_auth='))?.split('=')[1]
+  const token = cookie.split(';').map((s: string) => s.trim()).find((s: string) => s.startsWith('lex_auth='))?.split('=')[1]
   if (token === expected) {
     return NextResponse.next()
   }
