@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 
 export async function middleware(req: Request) {
   const url = new URL(req.url)
@@ -19,11 +18,11 @@ export async function middleware(req: Request) {
     return NextResponse.next()
   }
 
-  // Check for authentication cookie
-  const cookieStore = cookies()
-  const authCookie = cookieStore.get('lex_auth')
+  // Check for authentication cookie from request headers
+  const cookieHeader = req.headers.get('cookie') || ''
+  const authCookieMatch = cookieHeader.match(/lex_auth=([^;]+)/)
   
-  if (!authCookie || !authCookie.value) {
+  if (!authCookieMatch) {
     const loginUrl = new URL('/login', req.url)
     return NextResponse.redirect(loginUrl)
   }
@@ -37,7 +36,8 @@ export async function middleware(req: Request) {
       return NextResponse.redirect(loginUrl)
     }
 
-    const [value, signature] = authCookie.value.split('.')
+    const cookieValue = authCookieMatch[1]
+    const [value, signature] = cookieValue.split('.')
     if (!value || !signature) {
       const loginUrl = new URL('/login', req.url)
       return NextResponse.redirect(loginUrl)

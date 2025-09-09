@@ -10,7 +10,8 @@ export default function LoginPage() {
     setLoading(true); setError('')
     const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
     if (res.ok) {
-      window.location.href = '/'
+      // Force a hard redirect to ensure cookie is processed
+      window.location.replace('/')
     } else {
       const data = await res.json().catch(() => ({}))
       setError(data?.error || 'Login failed')
