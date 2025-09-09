@@ -38,6 +38,7 @@ export interface Transaction {
 export interface PaymentRecord {
   paid: boolean
   method?: PaymentMethod
+  date?: string
 }
 
 export type PaymentMethod = 'cash' | 'card' | 'bank' | 'online' | 'other'
