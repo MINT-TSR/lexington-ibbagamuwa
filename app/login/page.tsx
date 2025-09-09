@@ -1,57 +1,93 @@
 "use client"
 import { useState } from 'react'
+import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const router = useRouter()
 
-  async function submit() {
-    setLoading(true); setError('')
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault()
+    setLoading(true)
+    setError('')
+    
     try {
-      const res = await fetch('/api/login', { 
-        method: 'POST', 
-        headers: { 'Content-Type': 'application/json' }, 
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ password }),
-        credentials: 'include' // Ensure cookies are included
       })
-      
-      console.log('Login response:', res.status, res.ok)
-      
-      if (res.ok) {
-        // Check if we can access the dashboard
-        const dashboardRes = await fetch('/', { credentials: 'include' })
-        console.log('Dashboard access:', dashboardRes.status)
-        
-        if (dashboardRes.ok) {
-          window.location.replace('/')
-        } else {
-          // Try a full page reload to ensure cookies are processed
-          window.location.reload()
-        }
+
+      if (response.ok) {
+        // Force a hard redirect
+        window.location.href = '/'
       } else {
-        const data = await res.json().catch(() => ({}))
-        setError(data?.error || 'Login failed')
+        const data = await response.json()
+        setError(data.error || 'Login failed')
       }
-    } catch (error) {
-      console.error('Login error:', error)
+    } catch (err) {
       setError('Network error')
+    } finally {
+      setLoading(false)
     }
-    setLoading(false)
   }
 
   return (
-    <main className="min-h-[80vh] flex items-center justify-center p-6">
-      <div className="w-full max-w-sm rounded-xl border p-6 space-y-4">
-        <div className="text-center space-y-1">
-          <div className="text-lg font-semibold">Finance Dashboard</div>
-          <div className="text-xs text-gray-600">Sign in</div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="max-w-md w-full space-y-8 p-8">
+        <div className="text-center">
+          <img 
+            src="https://i.postimg.cc/zB72KbQW/jnmtyhj.png" 
+            alt="Lexington" 
+            className="mx-auto h-16 w-16"
+          />
+          <h2 className="mt-6 text-3xl font-bold text-gray-900">
+            Finance Dashboard
+          </h2>
+          <p className="mt-2 text-sm text-gray-600">
+            Sign in to your account
+          </p>
         </div>
-        <input type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-        {error && <div className="text-xs text-red-600">{error}</div>}
-        <button onClick={submit} disabled={loading} className="w-full text-sm">{loading ? 'Signing in...' : 'Sign in'}</button>
+        
+        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
+          <div>
+            <label htmlFor="password" className="sr-only">
+              Password
+            </label>
+            <input
+              id="password"
+              name="password"
+              type="password"
+              required
+              className="relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+          </div>
+
+          {error && (
+            <div className="text-red-600 text-sm text-center">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+            >
+              {loading ? 'Signing in...' : 'Sign in'}
+            </button>
+          </div>
+        </form>
       </div>
-    </main>
+    </div>
   )
 }
 
