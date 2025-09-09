@@ -8,7 +8,7 @@ export interface Student {
   className: string
   monthlyFee: number
   planId?: string | null
-  payments: Record<MonthKey, PaymentRecord>
+  payments: Partial<Record<MonthKey, PaymentRecord>>
 }
 
 export interface DataFileShape {
@@ -32,7 +32,7 @@ export interface Transaction {
   type: TransactionType
   amount: number
   note?: string
-  dateISO: string
+  date: string
 }
 
 export interface PaymentRecord {
