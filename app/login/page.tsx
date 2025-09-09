@@ -8,13 +8,34 @@ export default function LoginPage() {
 
   async function submit() {
     setLoading(true); setError('')
-    const res = await fetch('/api/login', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) })
-    if (res.ok) {
-      // Force a hard redirect to ensure cookie is processed
-      window.location.replace('/')
-    } else {
-      const data = await res.json().catch(() => ({}))
-      setError(data?.error || 'Login failed')
+    try {
+      const res = await fetch('/api/login', { 
+        method: 'POST', 
+        headers: { 'Content-Type': 'application/json' }, 
+        body: JSON.stringify({ password }),
+        credentials: 'include' // Ensure cookies are included
+      })
+      
+      console.log('Login response:', res.status, res.ok)
+      
+      if (res.ok) {
+        // Check if we can access the dashboard
+        const dashboardRes = await fetch('/', { credentials: 'include' })
+        console.log('Dashboard access:', dashboardRes.status)
+        
+        if (dashboardRes.ok) {
+          window.location.replace('/')
+        } else {
+          // Try a full page reload to ensure cookies are processed
+          window.location.reload()
+        }
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setError(data?.error || 'Login failed')
+      }
+    } catch (error) {
+      console.error('Login error:', error)
+      setError('Network error')
     }
     setLoading(false)
   }
