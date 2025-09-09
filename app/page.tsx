@@ -6,6 +6,7 @@ import { formatLKR } from '@/utils/format'
 type NewStudent = { name: string; className: string; monthlyFee: number }
 
 export default function Dashboard() {
+  const [authenticated, setAuthenticated] = useState(false)
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -19,6 +20,19 @@ export default function Dashboard() {
   const [showDeleteFor, setShowDeleteFor] = useState<string | null>(null)
   const [search, setSearch] = useState<string>('')
   let pressTimer: any
+
+  useEffect(() => {
+    const auth = localStorage.getItem('authenticated')
+    if (auth === 'true') {
+      setAuthenticated(true)
+    } else {
+      window.location.href = '/login'
+    }
+  }, [])
+
+  if (!authenticated) {
+    return <div>Loading...</div>
+  }
 
   async function load() {
     setLoading(true)

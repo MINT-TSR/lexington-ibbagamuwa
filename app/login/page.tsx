@@ -1,38 +1,18 @@
 "use client"
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 
 export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const router = useRouter()
 
-  async function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setLoading(true)
-    setError('')
-    
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ password }),
-      })
-
-      if (response.ok) {
-        // Force a hard redirect
-        window.location.href = '/'
-      } else {
-        const data = await response.json()
-        setError(data.error || 'Login failed')
-      }
-    } catch (err) {
-      setError('Network error')
-    } finally {
-      setLoading(false)
+    if (password === 'lexington2024') {
+      localStorage.setItem('authenticated', 'true')
+      window.location.href = '/'
+    } else {
+      setError('Invalid password')
     }
   }
 
